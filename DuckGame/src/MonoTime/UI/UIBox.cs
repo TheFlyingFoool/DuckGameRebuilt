@@ -234,7 +234,11 @@ namespace DuckGame
         };
         public override void Update()
         {
-            if (UIParentMenu != null && UIParentMenu.domouse && !UIParentMenu.gamepadMode && _currentMenuItemSelection != null && Mouse.available)
+            // A click activates the item here, so the select key below is skipped this update in case it's bound to the mouse too.
+            // Input.ignoreInput: online the pause menu updates a second time with the level, where keys are ignored but the mouse
+            // isn't, so a click would activate the item twice.
+            bool clicked = false;
+            if (UIParentMenu != null && UIParentMenu.domouse && !UIParentMenu.gamepadMode && _currentMenuItemSelection != null && Mouse.available && !Input.ignoreInput)
             {
                 for (int i = 0; i < _currentMenuItemSelection.Count; i++)
                 {
@@ -251,12 +255,14 @@ namespace DuckGame
                                 if (Mouse.left == InputState.Pressed)
                                 {
                                     uIMenuItem.Activate(Triggers.MenuRight);
+                                    clicked = true;
                                     _selection = i;
                                     break;
                                 }
                                 else if (Mouse.right == InputState.Pressed)
                                 {
                                     uIMenuItem.Activate(Triggers.MenuLeft);
+                                    clicked = true;
                                     _selection = i;
                                     break;
                                 }
@@ -267,6 +273,7 @@ namespace DuckGame
                                 if (Mouse.left == InputState.Pressed)
                                 {
                                     uIMenuItem.Activate(Triggers.Select);
+                                    clicked = true;
                                     _selection = i;
                                     break;
                                 }
@@ -371,7 +378,7 @@ namespace DuckGame
                         if (index == _selection)
                         {
                             _hoverControlString = uiMenuItem.controlString;
-                            if (uiMenuItem.isEnabled)
+                            if (uiMenuItem.isEnabled && !clicked)
                             {
                                 if (!_animating && Input.Pressed(Triggers.Select))
                                 {

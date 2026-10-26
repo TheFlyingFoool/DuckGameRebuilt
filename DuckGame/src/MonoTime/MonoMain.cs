@@ -1396,6 +1396,8 @@ namespace DuckGame
 
             if (Graphics.inFocus)
                 Input.Update();
+            else
+                Keyboard.ReleaseForOverlay();
             if (!Program.RecorderatorWatchMode)
             {
                 lock (LevelMetaData._completedPreviewTasks)

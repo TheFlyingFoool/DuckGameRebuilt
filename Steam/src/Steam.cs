@@ -203,6 +203,7 @@ public class Steam : IDisposable {
         _callbacks.Add(Callback<SteamRemotePlaySessionConnected_t>.Create(OnRemotePlayConnected));
         _callbacks.Add(Callback<GamepadTextInputDismissed_t>.Create(OnGamepadTextInputDismissed));
         _callbacks.Add(Callback<LobbyChatMsg_t>.Create(OnLobbyChatMessage));
+        _callbacks.Add(Callback<GameOverlayActivated_t>.Create(OnGameOverlayActivated));
 
         // Maintain CallResults which otherwise would be added, then removed behind the scenes:
         SetCallResult<GlobalStatsReceived_t>(OnRequestGlobalStats);
@@ -299,6 +300,9 @@ public class Steam : IDisposable {
             return;
         SteamAPI.RunCallbacks();
     }
+
+    /// <summary>Whether the Steam overlay is open right now.</summary>
+    public static bool overlayActive { get; private set; }
 
     public static unsafe void OverlayOpenURL(string url) {
         if (!initialized)
@@ -851,6 +855,10 @@ public class Steam : IDisposable {
     private static unsafe void OnRemotePlayConnected(SteamRemotePlaySessionConnected_t result)
     {
         RemotePlay?.Invoke();
+    }
+    private static void OnGameOverlayActivated(GameOverlayActivated_t result)
+    {
+        overlayActive = result.m_bActive != 0;
     }
     private static unsafe void OnConnectionRequest(P2PSessionRequest_t result) {
         ConnectionRequested?.Invoke(User.GetUser(result.m_steamIDRemote));

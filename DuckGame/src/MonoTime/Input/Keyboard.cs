@@ -42,6 +42,34 @@ namespace DuckGame
         private static bool _registerLock = false;
         //private static int _currentNote = 0;
         
+        // The Steam overlay takes the keyboard while it's open, so keys let go during it never look released and FNA keeps
+        // them held (and repeating). Keys count as up while the overlay is open, and keys held when it opened stay up until let go.
+        private static readonly HashSet<Microsoft.Xna.Framework.Input.Keys> _overlayHeldKeys = new HashSet<Microsoft.Xna.Framework.Input.Keys>();
+
+        private static KeyboardState FilterOverlayKeys(KeyboardState state)
+        {
+            if (Steam.overlayActive)
+            {
+                foreach (Microsoft.Xna.Framework.Input.Keys key in state.GetPressedKeys())
+                    _overlayHeldKeys.Add(key);
+                return new KeyboardState();
+            }
+            if (_overlayHeldKeys.Count == 0)
+                return state;
+            _overlayHeldKeys.RemoveWhere(state.IsKeyUp);
+            return new KeyboardState(state.GetPressedKeys().Where(key => !_overlayHeldKeys.Contains(key)).ToArray());
+        }
+
+        /// <summary>Called instead of input updates while the game is out of focus, so keys don't stay held behind the Steam overlay.</summary>
+        public static void ReleaseForOverlay()
+        {
+            if (!Steam.overlayActive)
+                return;
+            FilterOverlayKeys(Microsoft.Xna.Framework.Input.Keyboard.GetState());
+            _keyStatePrev = _keyState = new KeyboardState();
+            _repeatList.Clear();
+        }
+
         public static bool NothingPressed() => _keyState.GetPressedKeys().Length == 0 && _keyStatePrev.GetPressedKeys().Length == 0;
 
         public override bool isConnected => !_fakeDisconnect;
@@ -725,7 +753,7 @@ namespace DuckGame
             if (_flipper == 0)
             {
                 _keyStatePrev = _keyState;
-                _keyState = Microsoft.Xna.Framework.Input.Keyboard.GetState();
+                _keyState = FilterOverlayKeys(Microsoft.Xna.Framework.Input.Keyboard.GetState());
                 _keyboardPress = false;
                 int num = _keyState.GetPressedKeys().Length;
                 if (num != _lastKeyCount && num != 0)
