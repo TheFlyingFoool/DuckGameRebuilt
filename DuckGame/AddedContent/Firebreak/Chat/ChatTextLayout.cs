@@ -53,6 +53,8 @@ namespace DuckGame
         public Color color;
         /// <summary>Drawn faded, used for markup in the input box.</summary>
         public bool dim;
+        /// <summary>Not drawn and takes no space, used for tags in the input box that are applied instead of shown.</summary>
+        public bool hidden;
         /// <summary>Drawn white on a dark tag, used for the "+123" marker on cut off messages.</summary>
         public bool chip;
         /// <summary>Index in the source string, only set for literal text (the input box).</summary>
@@ -313,6 +315,8 @@ namespace DuckGame
                 for (int i = line.start; i < line.end; i++)
                 {
                     ChatGlyph glyph = glyphs[i];
+                    if (glyph.hidden)
+                        continue;
                     bool selected = i >= selectionFrom && i < selectionTo && selectionFrom >= 0;
                     float gx = origin.x + glyph.x;
                     float gy = origin.y + glyph.y;
@@ -818,6 +822,122 @@ namespace DuckGame
             }
             _style = previousStyle;
             _hasColor = previousHasColor;
+        }
+
+        /// <summary>
+        /// Appends typed text for the input box. Like <see cref="AppendLiteral"/> every character is one glyph (so the caret
+        /// can go anywhere), but the tags are applied to the text after them. A tag's own characters are hidden (no width,
+        /// the caret steps through them like in vanilla) unless <paramref name="showTag"/> says to show it, then it's drawn faded.
+        /// </summary>
+        /// <param name="showTag">Given a tag's start and end in <paramref name="text"/>, whether to show it as typed. Null hides every tag.</param>
+        /// <param name="formattingTags">If false, the DGR formatting tags are hidden but don't style anything (the Chat Rendering option).</param>
+        public void AppendTyped(string text, List<ChatSpriteSpan> sprites, Func<int, int, bool> showTag, bool formattingTags)
+        {
+            if (text == null)
+                return;
+            ChatStyle previousStyle = _style;
+            bool previousHasColor = _hasColor;
+            Color previousColor = _color;
+            ResetStyle();
+            ChatFormatting.TagKind? openCode = null;
+            int nextSprite = 0;
+            for (int i = 0; i < text.Length; i++)
+            {
+                char c = text[i];
+                if (sprites != null && nextSprite < sprites.Count && sprites[nextSprite].start == i)
+                {
+                    ChatSpriteSpan span = sprites[nextSprite++];
+                    Sprite clone = span.sprite.Clone();
+                    clone.xscale = span.sprite.xscale;
+                    clone.yscale = span.sprite.yscale;
+                    ChatGlyph glyph = AppendSprite(clone, text.Substring(span.start, span.end - span.start));
+                    glyph.sourceIndex = span.start;
+                    glyph.sourceEnd = span.end;
+                    i = span.end - 1;
+                    continue;
+                }
+                if (c == '|')
+                {
+                    bool isTag = ChatFormatting.TryMatchTag(text, i, out ChatFormatting.Tag tag, out int end);
+                    // Inside code only the matching closing tag does something, like in sent messages
+                    if (isTag && openCode != null && tag.kind != openCode)
+                        isTag = false;
+                    bool isColor = false;
+                    Color color = default;
+                    bool isPrevious = false;
+                    if (!isTag && openCode == null)
+                        isColor = ChatFormatting.TryMatchColorTag(text, i, out color, out isPrevious, out end);
+                    if (isTag || isColor)
+                    {
+                        bool show = showTag != null && showTag(i, end);
+                        ChatStyle style = _style;
+                        bool hasColor = _hasColor;
+                        _style = ChatStyle.None;
+                        _hasColor = false;
+                        for (int j = i; j < end; j++)
+                        {
+                            ChatGlyph glyph = AddChar(text[j], j, true);
+                            if (!show)
+                            {
+                                glyph.hidden = true;
+                                glyph.w = 0f;
+                            }
+                        }
+                        _style = style;
+                        _hasColor = hasColor;
+                        // Colors turned off: the tag still hides but doesn't color anything
+                        if (isColor && colors)
+                        {
+                            if (isPrevious)
+                            {
+                                bool hadColor = _hasColor;
+                                Color oldColor = _color;
+                                _hasColor = _previousHasColor;
+                                _color = _previousColor;
+                                _previousHasColor = hadColor;
+                                _previousColor = oldColor;
+                            }
+                            else
+                                SetColor(color);
+                        }
+                        else if (isTag && formattingTags)
+                        {
+                            switch (tag.kind)
+                            {
+                                case ChatFormatting.TagKind.Style:
+                                    _style ^= tag.style;
+                                    break;
+                                case ChatFormatting.TagKind.Reset:
+                                    ResetStyle();
+                                    break;
+                                // Code blocks get their own box in sent messages, while typing they look like inline code
+                                case ChatFormatting.TagKind.Code:
+                                case ChatFormatting.TagKind.CodeBlock:
+                                    if (openCode == null)
+                                    {
+                                        openCode = tag.kind;
+                                        _style |= ChatStyle.Code;
+                                    }
+                                    else
+                                    {
+                                        openCode = null;
+                                        _style &= ~ChatStyle.Code;
+                                    }
+                                    break;
+                            }
+                        }
+                        i = end - 1;
+                        continue;
+                    }
+                }
+                if (c == '\n')
+                    AppendBreak(sourceIndex: i);
+                else
+                    AddChar(c, i);
+            }
+            _style = previousStyle;
+            _hasColor = previousHasColor;
+            _color = previousColor;
         }
 
         /// <summary>

@@ -1485,6 +1485,11 @@ namespace DuckGame
         // The Chat Rendering option, which special parts of chat text get drawn
         private const int RenderFormattingFlag = 1;
         private const int RenderColorsFlag = 2;
+
+        // The Typing Tags option, how tags look in the chat box while typing
+        private const int TypingTagsShow = 0;
+        private const int TypingTagsAtCaret = 1;
+        private const int TypingTagsHide = 2;
         private static int chatRendering => DGRSettings.ChatRendering & (RenderFormattingFlag | RenderColorsFlag);
         private static bool renderFormatting => (chatRendering & RenderFormattingFlag) != 0;
         private static bool renderColors => (chatRendering & RenderColorsFlag) != 0;
@@ -1927,7 +1932,19 @@ namespace DuckGame
             builder.AppendLiteral(": ", 0, false);
             builder.links = true;
             s_inputPrefixLength = builder.count;
-            builder.AppendLiteral(text, 0, true, GetInputSprites());
+            int typingTags = Maths.Clamp(DGRSettings.ChatTypingTags, TypingTagsShow, TypingTagsHide);
+            if (typingTags == TypingTagsShow)
+                builder.AppendLiteral(text, 0, true, GetInputSprites());
+            else
+            {
+                // AT CARET: a tag stays visible while the caret is on it or the selection touches it, so it can be edited
+                int editFrom = Math.Min(s_caret, s_anchor);
+                int editTo = Math.Max(s_caret, s_anchor);
+                Func<int, int, bool> showTag = typingTags == TypingTagsAtCaret ? (start, end) => editFrom <= end && editTo >= start : (Func<int, int, bool>)null;
+                builder.colors = renderColors;
+                builder.AppendTyped(text, GetInputSprites(), showTag, renderFormatting);
+                builder.colors = true;
+            }
             ChatTextLayout layout = builder.Build();
             // The prefix glyphs shouldn't map to positions in the typed text
             for (int i = 0; i < s_inputPrefixLength && i < layout.glyphs.Count; i++)

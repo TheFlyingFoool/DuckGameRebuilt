@@ -481,6 +481,12 @@ namespace DuckGame
         /// <summary>When others see the typing bubble over your duck. 0 = once you've typed something, 1 = whenever your chat is open.</summary>
         [Marker.AutoConfig] public static int ChatTypingBubble = 0;
 
+        /// <summary>
+        /// How color and formatting tags look in the chat box while typing. 0 = shown as typed, faded. 1 = only the tag the caret
+        /// is on (or the selection touches) is shown, the rest are applied. 2 = all applied and hidden, like vanilla.
+        /// </summary>
+        [Marker.AutoConfig] public static int ChatTypingTags = 1;
+
         /// <summary>The version the changelog (Options > Rebuilt > What's New) was last opened on. The WHAT'S NEW button is
         /// pink until it's been opened on the current version.</summary>
         [Marker.AutoConfig] public static string ChangelogSeenVersion = "";

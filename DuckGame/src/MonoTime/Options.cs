@@ -693,6 +693,15 @@ namespace DuckGame
             {
                 dgrDescription = "When others see the typing bubble over your duck. TYPING shows it once you've typed something, ALWAYS shows it as soon as you open the chat"
             });
+            menu.Add(new UIMenuItemNumber("Typing Tags", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.ChatTypingTags), 0, 2), valStrings: new List<string>
+            {
+                "SHOW",
+                "AT CARET",
+                "HIDE"
+            })
+            {
+                dgrDescription = "How color and formatting tags look while typing. SHOW draws them faded as typed. AT CARET only shows the one you're editing and applies the rest. HIDE applies them all like vanilla, the caret steps through the hidden tags"
+            });
             tempDGRChatRenderingMenu = CreateDGRChatRenderingMenu(menu);
             menu.Add(new UIMenuItem("Chat Rendering", new UIMenuActionOpenMenu(menu, tempDGRChatRenderingMenu), backButton: true)
             {
