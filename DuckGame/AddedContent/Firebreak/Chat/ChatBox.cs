@@ -725,9 +725,18 @@ namespace DuckGame
         }
 
         /// <summary>
-        /// A letter, number, space, backspace or delete bound to CHAT sends instead of being typed, like vanilla. The text
-        /// input still sends the character, so it's taken back out here.
+        /// Any key that types something (letters, numbers, symbols like \ or ;, space, backspace, delete) bound to CHAT
+        /// sends instead of being typed, like vanilla. The text input still sends the character, so it's taken back out here.
         /// </summary>
+        private static bool TypesText(Keys key) =>
+            key >= Keys.A && key <= Keys.Z ||
+            key >= Keys.D0 && key <= Keys.D9 ||
+            key >= Keys.NumPad0 && key <= Keys.Divide || // numpad numbers and * + , - . /
+            key >= Keys.OemSemicolon && key <= Keys.OemTilde || // ; = , - . / `
+            key >= Keys.OemOpenBrackets && key <= Keys.Oem8 || // [ \ ] ' and more
+            key == Keys.OemBackslash ||
+            key == Keys.Space;
+
         private static void DropTypedChatKey()
         {
             if (s_inputQueue.Count == 0)
@@ -736,22 +745,18 @@ namespace DuckGame
             {
                 if (key >= (int)Keys.MouseKeys || !Keyboard.Pressed((Keys)key))
                     continue;
-                char typed;
-                if (key >= (int)Keys.A && key <= (int)Keys.Z)
-                    typed = (char)('a' + (key - (int)Keys.A));
-                else if (key >= (int)Keys.D0 && key <= (int)Keys.D9)
-                    typed = (char)('0' + (key - (int)Keys.D0));
-                else if (key >= (int)Keys.NumPad0 && key <= (int)Keys.NumPad9)
-                    typed = (char)('0' + (key - (int)Keys.NumPad0));
-                else if (key == (int)Keys.Space)
-                    typed = ' ';
-                else if (key == (int)Keys.Back)
-                    typed = (char)8;
+                int index;
+                if (key == (int)Keys.Back)
+                    index = s_inputQueue.LastIndexOf((char)8);
                 else if (key == (int)Keys.Delete)
-                    typed = (char)127;
+                    index = s_inputQueue.LastIndexOf((char)127);
+                else if (TypesText((Keys)key))
+                {
+                    // What a symbol key types depends on the keyboard layout and shift, so the last character typed goes
+                    index = s_inputQueue.FindLastIndex(x => x >= ' ' && x != (char)127);
+                }
                 else
                     continue;
-                int index = s_inputQueue.FindLastIndex(x => char.ToLowerInvariant(x) == typed);
                 if (index >= 0)
                     s_inputQueue.RemoveAt(index);
             }
