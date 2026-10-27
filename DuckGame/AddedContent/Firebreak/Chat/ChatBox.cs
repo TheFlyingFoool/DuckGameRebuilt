@@ -1917,10 +1917,16 @@ namespace DuckGame
             float reservedWidth = (buttonsOut ? buttonsWidth : 0f) + counterWidth + 4f * font.scale.x;
             float wrapWidth = Math.Max(120f, chatAreaWidth - 8f * chatScale - toolsWidth);
 
-            string prefix = localProfile.name + ": ";
+            // The name like in messages: its colors follow the Chat Rendering option, DGR formatting never applies (like vanilla)
             ChatTextLayoutBuilder builder = new ChatTextLayoutBuilder(font, wrapWidth) { trailingEmptyLine = true };
-            builder.AppendLiteral(prefix, 0, false);
-            s_inputPrefixLength = prefix.Length;
+            builder.links = false;
+            builder.colors = renderColors;
+            builder.AppendFormatted(localProfile.name, false, false);
+            builder.colors = true;
+            builder.ResetStyle();
+            builder.AppendLiteral(": ", 0, false);
+            builder.links = true;
+            s_inputPrefixLength = builder.count;
             builder.AppendLiteral(text, 0, true, GetInputSprites());
             ChatTextLayout layout = builder.Build();
             // The prefix glyphs shouldn't map to positions in the typed text
