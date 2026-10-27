@@ -1375,6 +1375,11 @@ namespace DuckGame
             
             UpdateAutoUpdaterProgress(5);
 
+            FileStream dgrZipStream = DownloadFile(GITHUB_RELEASE_URL + "/download/" + dgrZipName, zipPath);
+            
+            UpdateAutoUpdaterProgress(6);
+
+            // only clear old content once the new build has actually downloaded
             if (Directory.Exists(contentPath))
             {
                 // Get a list of all subdirectories within the directory -ChatGPT
@@ -1407,10 +1412,6 @@ namespace DuckGame
                     }
                 }
             }
-
-            FileStream dgrZipStream = DownloadFile(GITHUB_RELEASE_URL + "/download/" + dgrZipName, zipPath);
-            
-            UpdateAutoUpdaterProgress(6);
             
             if (!IsLinuxD)
             {
@@ -1421,13 +1422,15 @@ namespace DuckGame
             else
             {
                 Process unzipProcess = null;
+                // paths need quoting, the default steam install is ".../common/Duck Game"
+                string unzipArgs = $"-o -d \"{parentDirectoryPath}\" \"{zipPath}\"";
                 if (File.Exists("/usr/bin/unzip"))
                 {
-                    unzipProcess = Process.Start("/usr/bin/unzip", $"-o -d {parentDirectoryPath} {zipPath}");
+                    unzipProcess = Process.Start("/usr/bin/unzip", unzipArgs);
                 }
                 else if (File.Exists("/bin/unzip"))
                 {
-                    unzipProcess = Process.Start("/bin/unzip", $"-o -d {parentDirectoryPath} {zipPath}");
+                    unzipProcess = Process.Start("/bin/unzip", unzipArgs);
                 }
                 else
                 {
@@ -1436,6 +1439,9 @@ namespace DuckGame
                 }
                 
                 unzipProcess?.WaitForExit();
+
+                if (unzipProcess is { ExitCode: > 1 }) // 1 is just warnings
+                    throw new Exception($"unzip failed with exit code {unzipProcess.ExitCode}");
             }
 
             UpdateAutoUpdaterProgress(7);
