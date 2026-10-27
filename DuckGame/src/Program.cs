@@ -626,6 +626,15 @@ namespace DuckGame
                     case "-updaterebuilt":
                         MonoMain.ForceDGRUpdate = true;
                         break;
+                    case "-failrebuiltupdate": // for testing the updater failure menu, optionally takes which step to fail at
+                        MonoMain.ForceDGRUpdate = true;
+                        MonoMain.FailDGRUpdateAtStep = 5;
+                        if (index + 1 < args.Length && int.TryParse(args[index + 1], out int failStep))
+                        {
+                            MonoMain.FailDGRUpdateAtStep = failStep;
+                            index++;
+                        }
+                        break;
                     case "-experimental":
                         MonoMain.experimental = true;
                         break;
@@ -1348,6 +1357,7 @@ namespace DuckGame
             string dgrExePath = FilePath;
             string parentDirectoryPath = Path.GetDirectoryName(dgrExePath)!;
             string zipPath = parentDirectoryPath + $"/{dgrZipName}";
+            string zipDownloadPath = zipPath + ".tmp"; // half finished downloads get cleaned up with the other .tmp files
             string contentPath = parentDirectoryPath + "/Content/";
 
             UpdateAutoUpdaterProgress(2);
@@ -1375,11 +1385,14 @@ namespace DuckGame
             
             UpdateAutoUpdaterProgress(5);
 
-            FileStream dgrZipStream = DownloadFile(GITHUB_RELEASE_URL + "/download/" + dgrZipName, zipPath);
+            DownloadFile(GITHUB_RELEASE_URL + "/download/" + dgrZipName, zipDownloadPath);
+            
+            // nothing has been deleted yet, so if the download is bad we can still back out safely
+            ValidateUpdateZip(zipDownloadPath);
+            File.Move(zipDownloadPath, zipPath);
             
             UpdateAutoUpdaterProgress(6);
 
-            // only clear old content once the new build has actually downloaded
             if (Directory.Exists(contentPath))
             {
                 // Get a list of all subdirectories within the directory -ChatGPT
@@ -1415,33 +1428,17 @@ namespace DuckGame
             
             if (!IsLinuxD)
             {
+                using FileStream dgrZipStream = File.OpenRead(zipPath);
                 using ZipArchive archive = new(dgrZipStream);
                 archive.ExtractToDirectory(parentDirectoryPath);
-                archive.Dispose();
             }
             else
             {
-                Process unzipProcess = null;
                 // paths need quoting, the default steam install is ".../common/Duck Game"
-                string unzipArgs = $"-o -d \"{parentDirectoryPath}\" \"{zipPath}\"";
-                if (File.Exists("/usr/bin/unzip"))
-                {
-                    unzipProcess = Process.Start("/usr/bin/unzip", unzipArgs);
-                }
-                else if (File.Exists("/bin/unzip"))
-                {
-                    unzipProcess = Process.Start("/bin/unzip", unzipArgs);
-                }
-                else
-                {
-                    Console.WriteLine("\nunzip not found! Please install unzip or extract DuckGameRebuilt.zip yourself.");
-                    Process.GetCurrentProcess().Kill();
-                }
+                int unzipExitCode = RunUnzip($"-o -d \"{parentDirectoryPath}\" \"{zipPath}\"");
                 
-                unzipProcess?.WaitForExit();
-
-                if (unzipProcess is { ExitCode: > 1 }) // 1 is just warnings
-                    throw new Exception($"unzip failed with exit code {unzipProcess.ExitCode}");
+                if (unzipExitCode > 1) // 1 is just warnings
+                    throw new Exception($"unzip failed with exit code {unzipExitCode}");
             }
 
             UpdateAutoUpdaterProgress(7);
@@ -1453,6 +1450,47 @@ namespace DuckGame
             
             Process.Start(dgrExePath, Environment.CommandLine);
             Process.GetCurrentProcess().Kill(); // KILL !!!!!!!!!
+        }
+
+        /// <summary>
+        /// Makes sure a downloaded update is a complete zip with the game in it, so we don't
+        /// delete the player's Content folder for a broken download
+        /// </summary>
+        private static void ValidateUpdateZip(string zipPath)
+        {
+            if (IsLinuxD)
+            {
+                // mono's ZipArchive crashes on linux so let unzip check it instead
+                int testExitCode = RunUnzip($"-tqq \"{zipPath}\"");
+                if (testExitCode != 0)
+                    throw new Exception($"Downloaded update is corrupt (unzip exit code {testExitCode})");
+
+                // 11 means one of the files wasn't found in the zip
+                int findExitCode = RunUnzip($"-tqq \"{zipPath}\" DuckGame.exe \"Content/dialogue/*\"");
+                if (findExitCode != 0)
+                    throw new Exception($"Downloaded update is missing game files (unzip exit code {findExitCode})");
+                
+                return;
+            }
+
+            // opening the archive reads the central directory at the end of the file, so this also catches truncated downloads
+            using FileStream zipStream = File.OpenRead(zipPath);
+            using ZipArchive archive = new(zipStream);
+            
+            if (archive.GetEntry("DuckGame.exe") is null || !archive.Entries.Any(e => e.FullName.StartsWith("Content/")))
+                throw new Exception("Downloaded update is missing game files");
+        }
+
+        /// <returns>unzip's exit code</returns>
+        private static int RunUnzip(string arguments)
+        {
+            string unzipPath = File.Exists("/usr/bin/unzip") ? "/usr/bin/unzip"
+                : File.Exists("/bin/unzip") ? "/bin/unzip"
+                : throw new Exception("unzip not found! Please install unzip or extract DuckGameRebuilt.zip yourself.");
+
+            using Process unzipProcess = Process.Start(new ProcessStartInfo(unzipPath, arguments) { UseShellExecute = false })!;
+            unzipProcess.WaitForExit();
+            return unzipProcess.ExitCode;
         }
 
         private static void UpdateAutoUpdaterProgress(int step)
@@ -1470,6 +1508,9 @@ namespace DuckGame
             };
 
             AutoUpdaterCompletionProgress.Value = step;
+            
+            if (step == MonoMain.FailDGRUpdateAtStep)
+                throw new Exception($"Forced failure at step {step} (-failrebuiltupdate)");
         }
         
         public static DGVersion GetLatestReleaseVersion()
@@ -1584,32 +1625,38 @@ namespace DuckGame
 
         }
         
-        public static FileStream DownloadFile(string sourceURL, string destinationPath)
+        public static void DownloadFile(string sourceURL, string destinationPath)
         {
             // Set the buffer size to 1MB (1024 * 1000 bytes)
             const int bufferSize = 1024 * 1000;
 
-            // Create a FileStream to write the file to the specified destination path
-            FileStream saveFileStream = new(destinationPath, FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite);
-
             HttpWebRequest httpReq = (HttpWebRequest) WebRequest.Create(sourceURL);
-            HttpWebResponse httpRes = (HttpWebResponse) httpReq.GetResponse();
-            Stream responseStream = httpRes.GetResponseStream();
+            using HttpWebResponse httpRes = (HttpWebResponse) httpReq.GetResponse(); // throws on 4xx/5xx
+            using Stream responseStream = httpRes.GetResponseStream();
 
             if (responseStream is null)
                 throw new Exception("Unable to download file stream");
 
-            int byteSize;
-            byte[] downloadBuffer = new byte[bufferSize];
-
-            // Read data from the stream in chunks of the size of the buffer
-            // and write it to the saveFileStream until there is no more data to read
-            while ((byteSize = responseStream.Read(downloadBuffer, 0, downloadBuffer.Length)) > 0)
+            long totalBytes = 0;
+            
+            // Create a FileStream to write the file to the specified destination path
+            using (FileStream saveFileStream = new(destinationPath, FileMode.Create, FileAccess.Write, FileShare.None))
             {
-                saveFileStream.Write(downloadBuffer, 0, byteSize);
+                int byteSize;
+                byte[] downloadBuffer = new byte[bufferSize];
+
+                // Read data from the stream in chunks of the size of the buffer
+                // and write it to the saveFileStream until there is no more data to read
+                while ((byteSize = responseStream.Read(downloadBuffer, 0, downloadBuffer.Length)) > 0)
+                {
+                    saveFileStream.Write(downloadBuffer, 0, byteSize);
+                    totalBytes += byteSize;
+                }
             }
 
-            return saveFileStream;
+            // a dropped connection can just end the stream early instead of throwing
+            if (httpRes.ContentLength >= 0 && totalBytes != httpRes.ContentLength)
+                throw new Exception($"Download incomplete, got {totalBytes} of {httpRes.ContentLength} bytes");
         }
 
         public static string TranslateMessage(Exception exception)

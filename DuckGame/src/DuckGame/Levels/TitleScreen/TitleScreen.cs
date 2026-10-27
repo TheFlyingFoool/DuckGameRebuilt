@@ -3,6 +3,7 @@ using NAudio.MediaFoundation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 #if AutoUpdater
 using System.Threading;
 #endif
@@ -82,6 +83,9 @@ namespace DuckGame
         private UIComponent _pauseGroup;
         private UIMenu _mainPauseMenu;
         private UIMenu _updaterPromptMenu;
+        private UIMenu _updaterFailedMenu;
+        private Thread _updaterThread;
+        private string _updaterFailedStep = "";
         private MenuBoolean _enterCreditsMenuBool = new MenuBoolean();
         private UIMenu _betaMenu;
         private UIMenu _cloudConfigMenu;
@@ -604,6 +608,19 @@ namespace DuckGame
                 _updaterPromptMenu.Add(new LUIText(() => $"{Program.AutoUpdaterProgressMessage}", Colors.DGVanilla));
                 _updaterPromptMenu.Close();
                 _pauseGroup.Add(_updaterPromptMenu, false);
+
+                _updaterFailedMenu = new UIMenu("@DGR@DGR UPDATER@WRENCH@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 240f, conString: "@SELECT@SELECT");
+                _updaterFailedMenu.Add(new LUIText("Update failed while:", Colors.DGRed));
+                _updaterFailedMenu.Add(new LUIText(() => _updaterFailedStep, Colors.DGVanilla));
+                _updaterFailedMenu.Add(new LUIText("Check the console for details", Colors.Platinum));
+                _updaterFailedMenu.Add(new LUIText("", Colors.DGPink));
+                _updaterFailedMenu.Add(new LUIText("You may not be able to play", Colors.DGPink));
+                _updaterFailedMenu.Add(new LUIText("online until you update", Colors.DGPink));
+                _updaterFailedMenu.Add(new LUIText("", Colors.DGPink));
+                _updaterFailedMenu.Add(new UIMenuItem("TRY AGAIN", new UIMenuActionCloseMenuCallFunction(_updaterFailedMenu, RetryRebuiltUpdate)), true);
+                _updaterFailedMenu.Add(new UIMenuItem("PLAY WITHOUT UPDATING", new UIMenuActionCloseMenuCallFunction(_pauseGroup, SkipRebuiltUpdate)), true);
+                _updaterFailedMenu.Close();
+                _pauseGroup.Add(_updaterFailedMenu, false);
             }
 
             _mainPauseMenu = new UIMenu("@LWING@DUCK GAME@RWING@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@CANCEL@CLOSE @SELECT@SELECT");
@@ -1057,6 +1074,45 @@ namespace DuckGame
             base.Initialize();
         }
 
+        // level updates are paused while the updater menus are open, so retrying
+        // has to start the thread itself instead of waiting for Update to do it
+        private void StartRebuiltUpdater()
+        {
+            _updaterThread = new Thread(() =>
+            {
+                try
+                {
+                    Program.HandleAutoUpdater();
+                }
+                catch (Exception e)
+                {
+                    DevConsole.Log("AutoUpdater Failed:");
+                    DevConsole.LogComplexMessage(e.ToString(), Colors.DGRed);
+                    _updaterFailedStep = Program.AutoUpdaterProgressMessage;
+                    Tasker.Task(OpenUpdaterFailedMenu); // menus have to be swapped on the main thread
+                }
+            });
+            _updaterThread.Start();
+        }
+
+        private void OpenUpdaterFailedMenu()
+        {
+            _updaterPromptMenu.Close();
+            _updaterFailedMenu.Open();
+            MonoMain.pauseMenu = _updaterFailedMenu;
+            SFX.Play("pause", 0.6f);
+        }
+
+        private void RetryRebuiltUpdate()
+        {
+            _updaterPromptMenu.Open();
+            MonoMain.pauseMenu = _updaterPromptMenu;
+            StartRebuiltUpdater();
+        }
+
+        // only for this session, Checked stays true so it asks again next time the game boots
+        private void SkipRebuiltUpdate() => _shouldUpdateRebuilt = false;
+
         private void Join()
         {
         }
@@ -1083,22 +1139,8 @@ namespace DuckGame
             #if AutoUpdater
             if (_shouldUpdateRebuilt)
             {
-                new Thread(() =>
-                {
-                    try
-                    {
-                        Program.HandleAutoUpdater();
-                    }
-                    catch (Exception e)
-                    {
-                        DevConsole.Log("AutoUpdater Failed:");
-                        DevConsole.LogComplexMessage(e.ToString(), Colors.DGRed);
-                        if (MonoMain.pauseMenu != null)
-                        {
-                            MonoMain.pauseMenu.Close();
-                        }
-                    }
-                }).Start();
+                if (_updaterThread is null)
+                    StartRebuiltUpdater();
                 return;
             }
             #endif
