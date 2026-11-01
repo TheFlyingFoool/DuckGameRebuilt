@@ -50,6 +50,12 @@ namespace DuckGame
             {
                 if (item.text == Triggers.Cancel)
                     (Level.current as Editor).CloseMenu();
+                if (item.text.StartsWith("NEW") && Level.current is Editor editor && !editor.canLoadLevels)
+                {
+                    HUD.AddPlayerChangeDisplay("@UNPLUG@|RED| Only the host can do that!", 2f);
+                    editor.CloseMenu();
+                    return;
+                }
                 if (item.text == "NEW")
                 {
                     if (!Editor.hasUnsavedChanges || _unsavedChangesDialogue.contextString == "NEW" && _unsavedChangesDialogue.result)

@@ -80,11 +80,15 @@ namespace DuckGame
             if (DuckNetwork.levelIndex != levelIndex || !ChecksumsFinished())
                 return false;
             Level.current.things.RefreshState();
-            GhostManager.context.RefreshGhosts();
+
+            bool ghostless = _level is MultiplayerEditor;
+            if (!ghostless)
+                GhostManager.context.RefreshGhosts();
             if (connection != null)
             {
                 Send.Message(new NMLevelDataBegin(_level.networkIndex), connection);
-                GhostManager.context.UpdateGhostSync(connection, false, true, NetMessagePriority.ReliableOrdered);
+                if (!ghostless)
+                    GhostManager.context.UpdateGhostSync(connection, false, true, NetMessagePriority.ReliableOrdered);
                 Send.Message(new NMLevelData(_level), connection);
                 _level.SendLevelData(connection);
             }
@@ -110,6 +114,8 @@ namespace DuckGame
                     GameMode.numMatchesPlayed = 0;
                     _level = new RockIntro(null);
                 }
+                else if (level.StartsWith(MultiplayerEditor.kNetworkIdentifier))
+                    _level = new MultiplayerEditor(MultiplayerEditor.ParseSession(level));
                 else if (level == "@ROCKTHROW|SHOWSCORE")
                     _level = new RockScoreboard();
                 else if (level == "@ROCKTHROW|SHOWWINNER")

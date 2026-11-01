@@ -16,6 +16,7 @@ namespace DuckGame
 
         public void OnMessage(NetMessage m)
         {
+            if (MPEditorNet.ShouldDropEvent(m)) return;
             switch (m)
             {
                 case NMEvent _:

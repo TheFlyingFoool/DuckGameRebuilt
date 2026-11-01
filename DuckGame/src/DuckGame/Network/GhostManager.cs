@@ -158,6 +158,10 @@ namespace DuckGame
         public void OnMessage(NetMessage m)
         {
             crashIndex = -1;
+
+            //IGNOREEEEEEEE
+            if (!(m is NMProfileNetData) && !MPEditorNet.CanExchangeGhosts(m.connection))
+                return;
             string specialCode = "";
             try
             {

@@ -50,6 +50,8 @@ namespace DuckGame
         public bool _waitingOnTransition;
         public bool cold;
         public bool suppressLevelMessage;
+
+        public bool localNetworkTransition;
         private static int collectionCount;
         protected int _updateWaitFrames;
         private bool _sentLevelChange;
@@ -402,7 +404,7 @@ namespace DuckGame
                 RumbleManager.ClearRumbles(new RumbleType?());
                 if (_core.currentLevel is IHaveAVirtualTransition && _core.nextLevel is IHaveAVirtualTransition && !(_core.nextLevel is TeamSelect2))
                     VirtualTransition.GoVirtual();
-                if (Network.isActive && activeLevel != null && !_core.nextLevel._sentLevelChange)
+                if (Network.isActive && activeLevel != null && !_core.nextLevel._sentLevelChange && !_core.nextLevel.localNetworkTransition)
                 {
                     byte levelIndex = DuckNetwork.levelIndex;
                     DevConsole.Log(DCSection.GhostMan, "|DGYELLOW|Performing level swap (" + levelIndex.ToString() + ")");

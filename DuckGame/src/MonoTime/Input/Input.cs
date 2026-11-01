@@ -744,6 +744,10 @@ namespace DuckGame
             {
                 frame = 3
             });
+            _triggerImageMap.Add("SIGNALAWESOME", new SpriteMap("signal", 8, 5)
+            {
+                frame = 4
+            });
             _triggerImageMap.Add("PLUSKEY", new KeyImage('+'));
             _triggerImageMap.Add("ENTERKEY", new Sprite("buttons/keyboard/enter"));
             _triggerImageMap.Add("ESCAPEKEY", new Sprite("buttons/keyboard/escape"));

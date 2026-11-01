@@ -70,7 +70,7 @@ namespace DuckGame
         private bool _loadingLevel;
         private List<Thing> _placeObjects = new List<Thing>();
         public bool minimalConversionLoad;
-        private bool processingMirror;
+        protected bool processingMirror;
         private bool _isPaste;
         private bool _looseClear;
         public static LevelData _currentLevelData = new LevelData();
@@ -273,6 +273,16 @@ namespace DuckGame
         public static bool HasFocus() => focusStack.Count != 0;
 
         public bool placementLimitReached => placementLimit > 0 && placementTotalCost >= placementLimit;
+
+        public HashSet<Thing> selection => _selection;
+
+        public Thing hoverThing => _hover;
+
+        public Vec2 cursorTilePosition => _tilePosition;
+
+        public Thing currentPlacementType => _placementType;
+
+        public virtual bool canLoadLevels => true;
 
         public bool placementOutOfSizeRange => false;
 
@@ -668,7 +678,7 @@ namespace DuckGame
             return true;
         }
 
-        public void SteamUpload()
+        public virtual void SteamUpload()
         {
             if (arcadeMachineMode)
             {
@@ -760,7 +770,7 @@ namespace DuckGame
             shoulddo = true;
         }
         public bool shoulddo;
-        public void Quit() => _quitting = true;
+        public virtual void Quit() => _quitting = true;
 
         public override void DoInitialize()
         {
@@ -4043,14 +4053,19 @@ namespace DuckGame
         //        this.AddObject(Thing.LegacyLoadThing(element));
         //}
 
-        public void LoadLevel(string load)
+        public virtual void LoadLevel(string load)
         {
             load = load.Replace('\\', '/');
             while (load.StartsWith("/") && (!Program.IsLinuxD || !Path.IsPathRooted(load)))
                 load = load.Substring(1);
+            LoadLevelData(DuckFile.LoadLevel(load), load);
+        }
+
+        public void LoadLevelData(LevelData pData, string pSaveName, List<Thing> pObjects = null)
+        {
             ClearEverything();
-            _saveName = load;
-            _currentLevelData = DuckFile.LoadLevel(load);
+            _saveName = pSaveName;
+            _currentLevelData = pData;
             Thing.loadingLevel = _currentLevelData;
             if (_currentLevelData == null)
             {
@@ -4116,8 +4131,16 @@ namespace DuckGame
                 if (sideMask != 0)
                     _miniMode = true;
                 _loadingLevel = true;
-                LoadObjects(false);
-                LoadObjects(true);
+                if (pObjects == null)
+                {
+                    LoadObjects(false);
+                    LoadObjects(true);
+                }
+                else
+                {
+                    foreach (Thing pThing in pObjects)
+                        AddObject(pThing);
+                }
                 _loadingLevel = false;
                 _editorLoadFinished = true;
                 if (!_looseClear)
@@ -4981,7 +5004,7 @@ namespace DuckGame
             _closeMenu = false;
         }
 
-        public void Load()
+        public virtual void Load()
         {
             _fileDialog.Open(_initialDirectory, _initialDirectory, false);
             DoMenuClose();
@@ -4998,7 +5021,7 @@ namespace DuckGame
             return str;
         }
 
-        public void Play()
+        public virtual void Play()
         {
             foreach (Profile profile in Profiles.all)
             {

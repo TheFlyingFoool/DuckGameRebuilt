@@ -641,7 +641,8 @@ namespace DuckGame
                         profile.netData.Clean(this);
                     }
                 }
-                GhostManager.context.Update(this, flag);
+                if (MPEditorNet.CanExchangeGhosts(this))
+                    GhostManager.context.Update(this, flag);
             }
             NetSoundEffect.Update();
             _manager.Flush(flag);

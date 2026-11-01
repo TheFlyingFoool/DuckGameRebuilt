@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web.Profile;
 
 namespace DuckGame
 {
@@ -351,6 +352,10 @@ namespace DuckGame
             int ping = GetPing();
             string source = ping.ToString() + "|WHITE|MS";
             string text = ping >= 150 ? (ping >= 250 ? (_profile.connection == null ? "|DGRED|" + source + "@SIGNALDEAD@" : "|DGRED|" + source + "@SIGNALBAD@") : "|DGYELLOW|" + source + "@SIGNALNORMAL@") : "|DGGREEN|" + source + "@SIGNALGOOD@";
+            if (_profile.steamID == DGRDevs.Lucky.SteamID && _profile.isUsingRebuilt)
+            {
+                text = "|AQUA|Awesome!@SIGNALAWESOME@";
+            }
             _littleFont.Draw(text, position + new Vec2(90f - _littleFont.GetWidth(text), -3f), Color.White, depth + 10);
             if (_showKickMenu)
             {

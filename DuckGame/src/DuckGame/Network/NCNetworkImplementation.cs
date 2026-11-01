@@ -788,10 +788,11 @@ namespace DuckGame
 
         public void PostUpdate()
         {
+            MPEditorNet.Update();
             if (!Network.isActive)
                 return;
             List<NetworkConnection> allConnections = this.allConnections;
-            if (DuckNetwork.localProfile != null && Level.current != null && Level.current.levelIsUpdating && Level.current.transferCompleteCalled)
+            if (DuckNetwork.localProfile != null && Level.current != null && Level.current.levelIsUpdating && Level.current.transferCompleteCalled && !MPEditorNet.suppressLocalGhosts)
             {
                 _ghostManager.UpdateInit();
                 _ghostManager.UpdateGhostLerp();
