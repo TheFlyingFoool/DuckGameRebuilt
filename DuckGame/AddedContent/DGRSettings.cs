@@ -314,19 +314,10 @@ namespace DuckGame
             set
             {
                 MonoMain.graphics.SynchronizeWithVerticalRetrace = value;
-                //when vsync is ON we never want to use the draw rate limiter because vsync will do that
-                if (value)
-                {
-                    Program.main.UseDrawRateLimiter = false;
-                }
-                //when vsync is OFF we only want to use the rate limiter if:
-                //Uncapped FPS is on && The user has set a target fps that is not 0
-                else
-                {
-                    Program.main.UseDrawRateLimiter = (UncappedFPS && TargetFrameRate != 0);
-                }
-
                 S_UseVSync = value;
+                // Rate limiter is also applied as a safety net: vsync silently fails to cap on some
+                // setups (G-Sync / FreeSync / certain windowed configs), so honor FPS Target regardless.
+                Program.main.UseDrawRateLimiter = UncappedFPS && TargetFrameRate >= 60;
                 MonoMain.graphics.ApplyChanges();
             }
         }
@@ -343,17 +334,9 @@ namespace DuckGame
             }
             set
             {
-                if (value >= 60)
-                {
-                    Program.main.DrawRateLimiterTarget = S_TargetFrameRate;
-                    Program.main.UseDrawRateLimiter = true;
-                    S_TargetFrameRate = value;
-                }
-                else
-                {
-                    Program.main.UseDrawRateLimiter = false;
-                    S_TargetFrameRate = 0;
-                }
+                S_TargetFrameRate = value >= 60 ? value : 0;
+                Program.main.DrawRateLimiterTarget = Math.Max(S_TargetFrameRate, 60);
+                Program.main.UseDrawRateLimiter = UncappedFPS && S_TargetFrameRate >= 60;
             }
         }
 
@@ -362,7 +345,7 @@ namespace DuckGame
             MonoMain.graphics.SynchronizeWithVerticalRetrace = UseVSync;
             Program.main.UnFixedDraw = UncappedFPS;
             Program.main.DrawRateLimiterTarget = Math.Max(TargetFrameRate,60);
-            Program.main.UseDrawRateLimiter = !UseVSync && UncappedFPS && TargetFrameRate >= 60;
+            Program.main.UseDrawRateLimiter = UncappedFPS && TargetFrameRate >= 60;
 
 
             Program.main.TargetElapsedTime = TimeSpan.FromTicks(163934); // Default to 61ups -Lucky
