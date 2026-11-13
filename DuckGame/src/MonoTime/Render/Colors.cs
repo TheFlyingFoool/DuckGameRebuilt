@@ -3,6 +3,54 @@ using System.Collections.Generic;
 
 namespace DuckGame
 {
+    public static class ColorName
+    {
+        public const string PREV = "PREV";
+        public const string AQUA = "AQUA";
+        public const string RED = "RED";
+        public const string WHITE = "WHITE";
+        public const string BLACK = "BLACK";
+        public const string DARKNESS = "DARKNESS";
+        public const string BLUE = "BLUE";
+        public const string DGBLUE = "DGBLUE";
+        public const string DGRED = "DGRED";
+        public const string DGREDDD = "DGREDDD";
+        public const string DGGREEN = "DGGREEN";
+        public const string DGGREENN = "DGGREENN";
+        public const string DGYELLOW = "DGYELLOW";
+        public const string DGYELLO = "DGYELLO";
+        public const string DGORANGE = "DGORANGE";
+        public const string ORANGE = "ORANGE";
+        public const string MENUORANGE = "MENUORANGE";
+        public const string YELLOW = "YELLOW";
+        public const string GREEN = "GREEN";
+        public const string LIME = "LIME";
+        public const string TIMELIME = "TIMELIME";
+        public const string GRAY = "GRAY";
+        public const string LIGHTGRAY = "LIGHTGRAY";
+        public const string CREDITSGRAY = "CREDITSGRAY";
+        public const string BLUEGRAY = "BLUEGRAY";
+        public const string PINK = "PINK";
+        public const string PURPLE = "PURPLE";
+        public const string DGPURPLE = "DGPURPLE";
+        public const string CBRONZE = "CBRONZE";
+        public const string CSILVER = "CSILVER";
+        public const string CGOLD = "CGOLD";
+        public const string CPLATINUM = "CPLATINUM";
+        public const string CDEV = "CDEV";
+        public const string DUCKCOLOR1 = "DUCKCOLOR1";
+        public const string DUCKCOLOR2 = "DUCKCOLOR2";
+        public const string DUCKCOLOR3 = "DUCKCOLOR3";
+        public const string DUCKCOLOR4 = "DUCKCOLOR4";
+        public const string RBOW_1 = "RBOW_1";
+        public const string RBOW_2 = "RBOW_2";
+        public const string RBOW_3 = "RBOW_3";
+        public const string RBOW_4 = "RBOW_4";
+        public const string RBOW_5 = "RBOW_5";
+        public const string RBOW_6 = "RBOW_6";
+        public const string RBOW_7 = "RBOW_7";
+    }
+
     public class Colors
     {
         public static Color MenuOption = new Color(235, 137, 51);
@@ -29,7 +77,7 @@ namespace DuckGame
         public static Color Duck4 = new Color(205, 107, 29);
         public static Color SuperDarkBlueGray = new Color(8, 12, 16);
         public static Color SystemGray = new Color(173, 173, 173);
-        public static Color[] Rainbow = new Color[] { 
+        public static Color[] Rainbow = new Color[] {
             new Color(255, 0, 0),
             new Color(255, 127, 0),
             new Color(255, 255, 0),
@@ -41,181 +89,54 @@ namespace DuckGame
             new Color(0, 0, 255),
             new Color(127, 0, 255),
             new Color(255, 0, 255),
-            new Color(255, 0, 127) };
+            new Color(255, 0, 127)
+        };
+
         private static Dictionary<string, Color> _colorMap = new Dictionary<string, Color>()
         {
-            {
-                "AQUA",
-                new Color(0, (int) byte.MaxValue, (int) byte.MaxValue, (int) byte.MaxValue)
-            },
-            {
-                "RED",
-                Color.Red
-            },
-            {
-                "WHITE",
-                Color.White
-            },
-            {
-                "BLACK",
-                Color.Black
-            },
-            {
-                "DARKNESS",
-                new Color(10, 10, 10)
-            },
-            {
-                "BLUE",
-                Color.Blue
-            },
-            {
-                "DGBLUE",
-                DGBlue
-            },
-            {
-                "DGRED",
-                DGRed
-            },
-            {
-                "DGREDDD",
-                DGRed
-            },
-            {
-                "DGGREEN",
-                DGGreen
-            },
-            {
-                "DGGREENN",
-                DGGreen
-            },
-            {
-                "DGYELLOW",
-                DGYellow
-            },
-            {
-                "DGYELLO",
-                DGYellow
-            },
-            {
-                "DGORANGE",
-                new Color(235, 136, 49)
-            },
-            {
-                "ORANGE",
-                new Color(235, 137, 51)
-            },
-            {
-                "MENUORANGE",
-                MenuOption
-            },
-            {
-                "YELLOW",
-                new Color(247, 224, 90)
-            },
-            {
-                "GREEN",
-                Color.LimeGreen
-            },
-            {
-                "LIME",
-                Color.LimeGreen
-            },
-            {
-                "TIMELIME",
-                Color.Lime
-            },
-            {
-                "GRAY",
-                new Color(70, 70, 70)
-            },
-            {
-                "LIGHTGRAY",
-                new Color(96, 119, 124)
-            },
-            {
-                "CREDITSGRAY",
-                new Color(137, 159, 164)
-            },
-            {
-                "BLUEGRAY",
-                BlueGray
-            },
-            {
-                "PINK",
-                DGPink
-            },
-            {
-                "PURPLE",
-                new Color(115, 48, 242)
-            },
-            {
-                "DGPURPLE",
-                new Color(115, 48, 242)
-            },
-            {
-                "CBRONZE",
-                Bronze
-            },
-            {
-                "CSILVER",
-                Silver
-            },
-            {
-                "CGOLD",
-                Gold
-            },
-            {
-                "CPLATINUM",
-                Platinum
-            },
-            {
-                "CDEV",
-                Developer
-            },
-            {
-                "DUCKCOLOR1",
-                Duck1
-            },
-            {
-                "DUCKCOLOR2",
-                Duck2
-            },
-            {
-                "DUCKCOLOR3",
-                Duck3
-            },
-            {
-                "DUCKCOLOR4",
-                Duck4
-            },
-            {
-                "RBOW_1",
-                new Color(192, 35, 45)
-            },
-            {
-                "RBOW_2",
-                new Color(237, 94, 238)
-            },
-            {
-                "RBOW_3",
-                new Color(138, 38, 190)
-            },
-            {
-                "RBOW_4",
-                new Color(49, 162, 242)
-            },
-            {
-                "RBOW_5",
-                new Color(149, 188, 37)
-            },
-            {
-                "RBOW_6",
-                new Color(247, 224, 90)
-            },
-            {
-                "RBOW_7",
-                new Color(235, 137, 49)
-            }
+            { ColorName.AQUA, new Color(0, (int) byte.MaxValue, (int) byte.MaxValue, (int) byte.MaxValue) },
+            { ColorName.RED, Color.Red },
+            { ColorName.WHITE, Color.White },
+            { ColorName.BLACK, Color.Black },
+            { ColorName.DARKNESS, new Color(10, 10, 10) },
+            { ColorName.BLUE, Color.Blue },
+            { ColorName.DGBLUE, DGBlue },
+            { ColorName.DGRED, DGRed },
+            { ColorName.DGREDDD, DGRed },
+            { ColorName.DGGREEN, DGGreen },
+            { ColorName.DGGREENN, DGGreen },
+            { ColorName.DGYELLOW, DGYellow },
+            { ColorName.DGYELLO, DGYellow },
+            { ColorName.DGORANGE, new Color(235, 136, 49) },
+            { ColorName.ORANGE, new Color(235, 137, 51) },
+            { ColorName.MENUORANGE, MenuOption },
+            { ColorName.YELLOW, new Color(247, 224, 90) },
+            { ColorName.GREEN, Color.LimeGreen },
+            { ColorName.LIME, Color.LimeGreen },
+            { ColorName.TIMELIME, Color.Lime },
+            { ColorName.GRAY, new Color(70, 70, 70) },
+            { ColorName.LIGHTGRAY, new Color(96, 119, 124) },
+            { ColorName.CREDITSGRAY, new Color(137, 159, 164) },
+            { ColorName.BLUEGRAY, BlueGray },
+            { ColorName.PINK, DGPink },
+            { ColorName.PURPLE, new Color(115, 48, 242) },
+            { ColorName.DGPURPLE, new Color(115, 48, 242) },
+            { ColorName.CBRONZE, Bronze },
+            { ColorName.CSILVER, Silver },
+            { ColorName.CGOLD, Gold },
+            { ColorName.CPLATINUM, Platinum },
+            { ColorName.CDEV, Developer },
+            { ColorName.DUCKCOLOR1, Duck1 },
+            { ColorName.DUCKCOLOR2, Duck2 },
+            { ColorName.DUCKCOLOR3, Duck3 },
+            { ColorName.DUCKCOLOR4, Duck4 },
+            { ColorName.RBOW_1, new Color(192, 35, 45) },
+            { ColorName.RBOW_2, new Color(237, 94, 238) },
+            { ColorName.RBOW_3, new Color(138, 38, 190) },
+            { ColorName.RBOW_4, new Color(49, 162, 242) },
+            { ColorName.RBOW_5, new Color(149, 188, 37) },
+            { ColorName.RBOW_6, new Color(247, 224, 90) },
+            { ColorName.RBOW_7, new Color(235, 137, 49) }
         };
         private static float HueToRGB(float v1, float v2, float vH)
         {
